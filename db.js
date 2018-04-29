@@ -11,7 +11,7 @@ const client = new Client({
 
 module.exports = {
   query: function(query, values, callback){
-    client.connet();
+    client.connect();
     return client.query(query, values, callback);
   },
   end: function(){

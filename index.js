@@ -11,10 +11,26 @@ bot.onText(/\/list/, (msg) => {
   db.query("SELECT * FROM mytable", (err, res) => {
     if(err) console.log(err.stack);
     else {
-      var reminder = res.rows[0];
-      var message = reminder.date + " - " + reminder.message;
-      bot.sendMessage(msg.chat.id, message);
+      var msgList = [];
+      for (let row of res.rows) {
+        var message = row.date + " - " + row.message;
+        msgList.push(message);
+      }
       db.end();
+      bot.sendMessage(msg.chat.id, msgList.join("\n"));
     }
   });
+});
+
+bot.onText(/\/remind/, (msg) => {
+  var text = msg.text.split(" ");
+  text.shift();
+  var name = msg.from.id;
+  var date = text.shift();
+  var reminder = text.join(" ");
+  db.query("INSERT INTO mytable (name, date, message) VALUES (${name}, ${date}, ${reminder})", (err, res) => {
+    if (err) console.log(err.stack);
+  });
+  db.end();
+  bot.sendMessage(msg.chat.id, "Reminder added!");
 });
