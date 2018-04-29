@@ -3,7 +3,9 @@ const api_key = process.env.API_KEY;
 const bot = new Telebot(api_key, { polling: true });
 
 const { Client } = require("pg");
-const client = new Client();
+const client = new Client({
+  connectionString: process.env.DATABASE_URL
+});
 client.connect();
 
 bot.onText(/\/start/, (msg) => {
