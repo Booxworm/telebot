@@ -1,21 +1,20 @@
 const Telebot = require("node-telegram-bot-api");
+const db = require("./db");
 const api_key = process.env.API_KEY;
 const bot = new Telebot(api_key, { polling: true });
-
-const { Client } = require("pg");
-const client = new Client({
-  connectionString: process.env.DATABASE_URL
-});
-client.connect();
 
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, "Welcome");
 });
 
-bot.onText(/\/query/, (msg) => {
-  client.query("SELECT # FROM mytable", (err, res) => {
-    if(err) throw err;
-    bot.sendMessage(msg.chat.id, res.rows[0]);
-    client.end();
+bot.onText(/\/list/, (msg) => {
+  db.query("SELECT * FROM mytable", (err, res) => {
+    if(err) console.log(err.stack);
+    else {
+      var reminder = res.rows[0];
+      var message = reminder.date + " - " + reminder.message;
+      bot.sendMessage(msg.chat.id, message);
+      db.end();
+    }
   });
 });
