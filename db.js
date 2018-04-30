@@ -24,8 +24,8 @@ module.exports = {
       if(err) console.log(err.stack);
     });
   },
-  delete: function(name){
-    client.query(`DELETE FROM ${table} WHERE name='${name}';`, (err, res) => {
+  delete: function(name, date, message){
+    client.query(`DELETE FROM ${table} WHERE name='${name}' AND date='${date}' AND message='${message}';`, (err, res) => {
       if(err) console.log(err.stack);
     });
   },
