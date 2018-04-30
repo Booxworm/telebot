@@ -1,4 +1,4 @@
-module.exports = {
+var self = {
   parseList: function(res, command=''){
     if (!res.rows.length){
       return null;
@@ -21,7 +21,7 @@ module.exports = {
     text = text.split(' ');
     var command = text.shift();
     if (command == "/remind") {
-      res.date = text.shift();
+      res.date = self.date(text[0]) ? text.shift() : today();
       res.message = text.join(' ');
     } else if (command == "/remove") {
       res.date = text.shift();
@@ -33,8 +33,10 @@ module.exports = {
   date: function(date="today"){
     if (date.match(/\d+([\/-]-\d+)?/)) {
       return date.replace('-','/');
-    } else {
+    } else if (date == "today") {
       return today();
+    } else {
+      return null;
     }
   }
 }
@@ -43,3 +45,5 @@ function today(){
   var d = new Date();
   return `${d.getDate()}/${d.getMonth()+1}`;
 }
+
+module.exports = self;
