@@ -2,10 +2,16 @@ const Telebot = require("node-telegram-bot-api");
 const db = require("./db");
 const io = require("./iochecker");
 const api_key = process.env.API_KEY;
-const bot = new Telebot(api_key, { polling: true });
+const bot = new Telebot(api_key, {
+  webHook: {
+    port: process.env.PORT
+  }
+});
+const url = `${process.env.APP_URL}.herokuapp.com:443/bot${api_key}`;
+bot.setWebHook(url);
 
 bot.onText(/\/start/, (msg) => {
-  bot.sendMessage(msg.chat.id, "Welcome");
+  bot.sendMessage(msg.chat.id, "Welcome!");
 });
 
 bot.onText(/\/list/, (msg) => {

@@ -5,12 +5,9 @@ const client = new Client({
   host: process.env.DBHOST,
   port: 5432,
   database: process.env.DB,
-  //connectionString: process.env.DATABASE_URL,
   ssl: true
 });
 const table = "mytable";
-
-client.connect();
 
 module.exports = {
   list: function(name, callback){
@@ -28,8 +25,5 @@ module.exports = {
     client.query(`DELETE FROM ${table} WHERE name='${name}' AND date='${date}' AND message='${message}';`, (err, res) => {
       if(err) console.log(err.stack);
     });
-  },
-  end: function(){
-    client.end();
   }
 }
