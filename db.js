@@ -9,6 +9,8 @@ const client = new Client({
 });
 const table = "mytable";
 
+client.connect();
+
 module.exports = {
   list: function(name, callback){
     client.query(`SELECT * FROM ${table} WHERE name='${name}';`, (err, res) => {

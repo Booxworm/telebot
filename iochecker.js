@@ -1,4 +1,4 @@
-var self = {
+var io = {
   parseList: function(res, command=''){
     if (!res.rows.length){
       return null;
@@ -21,7 +21,7 @@ var self = {
     text = text.split(' ');
     var command = text.shift();
     if (command == "/remind") {
-      res.date = self.date(text[0]) ? text.shift() : today();
+      res.date = io.date(text[0]) ? text.shift() : today();
       res.message = text.join(' ');
     } else if (command == "/remove") {
       res.date = text.shift();
@@ -46,4 +46,4 @@ function today(){
   return `${d.getDate()}/${d.getMonth()+1}`;
 }
 
-module.exports = self;
+module.exports = io;
