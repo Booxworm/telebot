@@ -5,6 +5,7 @@ const io = require("./iochecker");
 
 // Setting up bot with webhook
 const api_key = process.env.API_KEY;
+//const bot = new Telebot(api_key, { polling: true });
 const bot = new Telebot(api_key, {
   webHook: {
     port: process.env.PORT
@@ -61,4 +62,8 @@ bot.onText(/\/remove/, (msg) => {
       }
     });
   }
+});
+
+bot.on("message", (msg) => {
+  bot.sendMessage(msg.chat.id, msg.text);
 });
