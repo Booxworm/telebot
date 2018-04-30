@@ -9,13 +9,18 @@ bot.onText(/\/start/, (msg) => {
 });
 
 bot.onText(/\/list/, (msg) => {
-  var { Result } = db.query(`SELECT * FROM ${table};`, (err, res) => {
-    if(err) console.log(err.stack);
-    else {
+  db.query(`SELECT * FROM ${table};`, (err, res) => {
+    if(err) {
+      console.log(err.stack);
+    } else if (!res.rows.length) {
+      bot.sendMessage(msg.chat.id, "You have no saved reminders!");
+    }else {
       var msgList = [];
       for (let row of res.rows) {
-        var message = `${row.name}: ${row.date} - ${row.message}`;
-        msgList.push(message);
+        if (row.name.trim() == msg.from.id){
+          var message = `${row.date.trim()} - ${row.message.trim()}`;
+          msgList.push(message);
+        }
       }
       bot.sendMessage(msg.chat.id, msgList.join("\n"));
     }
@@ -33,6 +38,6 @@ bot.onText(/\/remind/, (msg) => {
 });
 
 bot.onText(/\/remove/, (msg) => {
-  db.query(`DELETE FROM ${table};`);
+  db.query(`DELETE FROM ${table} WHERE name='${msg.from.id}';`);
   bot.sendMessage(msg.chat.id, "Reminders removed!");
 });
