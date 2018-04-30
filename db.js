@@ -9,9 +9,10 @@ const client = new Client({
   ssl: true
 });
 
+client.connect();
+
 module.exports = {
   query: function(query, values, callback){
-    client.connect();
     return client.query(query, values, callback);
   },
   end: function(){

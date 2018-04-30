@@ -9,31 +9,30 @@ bot.onText(/\/start/, (msg) => {
 });
 
 bot.onText(/\/list/, (msg) => {
-  db.query(`SELECT * FROM ${table}`, (err, res) => {
+  var { Result } = db.query(`SELECT * FROM ${table};`, (err, res) => {
     if(err) console.log(err.stack);
     else {
       var msgList = [];
       for (let row of res.rows) {
-        var message = `${row.date} - ${row.message}`;
+        var message = `${row.name}: ${row.date} - ${row.message}`;
         msgList.push(message);
       }
-      db.end();
       bot.sendMessage(msg.chat.id, msgList.join("\n"));
     }
   });
 });
 
-/*
 bot.onText(/\/remind/, (msg) => {
   var text = msg.text.split(" ");
   text.shift();
   var name = msg.from.id;
   var date = text.shift();
-  var reminder = text.join(" ");
-  db.query(`INSERT INTO ${table} (name, date, message) VALUES (${name}, ${date}, ${reminder})`, (err, res) => {
-    if (err) console.log(err.stack);
-  });
-  db.end();
+  var message = text.join(" ");
+  db.query(`INSERT INTO ${table} (name, date, message) VALUES ('${name}', '${date}', '${message}');`);
   bot.sendMessage(msg.chat.id, "Reminder added!");
 });
-*/
+
+bot.onText(/\/remove/, (msg) => {
+  db.query(`DELETE FROM ${table};`);
+  bot.sendMessage(msg.chat.id, "Reminders removed!");
+});
