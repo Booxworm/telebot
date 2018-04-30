@@ -1,6 +1,9 @@
 const Telebot = require("node-telegram-bot-api");
+const app = require("./server");
 const db = require("./db");
 const io = require("./iochecker");
+
+// Setting up bot with webhook
 const api_key = process.env.API_KEY;
 const bot = new Telebot(api_key, {
   webHook: {

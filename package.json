@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/booxworm/telebot#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
     "node-telegram-bot-api": "^0.30.0",
     "pg": "^7.4.1"
   }
